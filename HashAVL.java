@@ -5,17 +5,17 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-public class HashAVL<K extends Comparable<K>, V> {
+public class HashAVL<K extends Comparable<K>, V extends Comparable<V>> {
 	protected int size; 		// Table size
 	protected int elements; 	// Number of elements
-	protected AVLTree<K, V>[] tabla;
+	protected AVLTree<V>[] tabla;
 	protected final static int INIT_CAP = 101;
 
 	@SuppressWarnings("unchecked")
 	public HashAVL(int size, int carga) {
 		this.size = size;
 		this.elements = 0;
-		this.tabla = (AVLTree<K, V>[]) new AVLTree[size];
+		this.tabla = (AVLTree<V>[]) new AVLTree[size];
 	}
 
 	public HashAVL() {
@@ -38,16 +38,16 @@ public class HashAVL<K extends Comparable<K>, V> {
 		return this.elements == 0;
 	}
 
-	public AVLTree.Node<K, V> get(K key) {
+	public V get(K key, V value) {
 		if (key == null) {
 			throw new NullPointerException("Invalid key. Key is null");
 		}
 		int pos = hash(key);
-		return tabla[pos].get(key);
+		return tabla[pos].get(value);
 	}
 
-	public boolean contains(K key) {
-		return get(key) == null;
+	public boolean contains(K key, V value) {
+		return get(key, value) == null;
 	}
 
 	public void add(K key, V value) {
@@ -56,18 +56,18 @@ public class HashAVL<K extends Comparable<K>, V> {
 		}
 		int pos = hash(key);
 		if (tabla[pos] == null){
-			tabla[pos] = new AVLTree(key, value);
+			tabla[pos] = new AVLTree(value);
 		}
-		tabla[pos].insert(key, value);
+		tabla[pos].insert(value);
 		this.elements++;
 	}
 
-	public AVLTree.Node<K, V> remove(K key) {
+	public V remove(K key, V value) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 		int pos = hash(key);
-		return tabla[pos].remove(key);
+		return tabla[pos].remove(value).getElement();
 	}
 	
 	/*public static void main(String[] args) {

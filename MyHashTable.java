@@ -38,21 +38,21 @@ public class MyHashTable<K, V> {
 		return this.elements == 0;
 	}
 
-	public V get(K key) {
+	public Node<K, V> get(K key) {
 		if (key == null) {
 			throw new NullPointerException("Invalid key. Key is null");
 		}
 		int pos = hash(key);
 		for (Node<K, V> x = tabla[pos]; x != null; x = x.getNext()) {
 			if (x.getKeg().equals(key)) {
-				return x.getValue();
+				return x;
 			}
 		}
 		return null;
 	}
 
 	public boolean contains(K key) {
-		return get(key) == null;
+		return get(key) != null;
 	}
 
 	public void add(K key, V value) {
@@ -195,6 +195,10 @@ public class MyHashTable<K, V> {
 
 		public void setNext(Node<K, V> next) {
 			this.next = next;
+		}
+		@Override
+		public String toString() {
+			return "[" + keg + " - " + value + "]";
 		}
 	}
 }
