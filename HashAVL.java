@@ -1,10 +1,5 @@
 package Project;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-
 public class HashAVL<K extends Comparable<K>, V extends Comparable<V>> {
 	protected int size; 		// Table size
 	protected int elements; 	// Number of elements
@@ -56,7 +51,7 @@ public class HashAVL<K extends Comparable<K>, V extends Comparable<V>> {
 		}
 		int pos = hash(key);
 		if (tabla[pos] == null){
-			tabla[pos] = new AVLTree(value);
+			tabla[pos] = new AVLTree<V>(value);
 		}
 		tabla[pos].insert(value);
 		this.elements++;

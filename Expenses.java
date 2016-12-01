@@ -2,7 +2,7 @@ package Project;
 
 public class Expenses<K extends Comparable<K>, V extends Comparable <V>> {
 	
-	private AVLTreeEx[] tabla;
+	private AVLTreeEx<V>[] tabla;
 	protected int size; 		// Table size
 	protected int elements; 	// Number of elements
 	protected final static int INIT_CAP = 101;
@@ -42,8 +42,12 @@ public class Expenses<K extends Comparable<K>, V extends Comparable <V>> {
 		return (V) tabla[pos].get(value);
 	}
 
-	public boolean contains(K key, V value) {
-		return get(key, value) == null;
+	public boolean contains(K key) {
+		if (key == null) {
+			throw new NullPointerException("Invalid key. Key is null");
+		}
+		int pos = hash(key);
+		return tabla[pos] != null;
 	}
 
 	public void add(K key, V value) {
@@ -52,7 +56,7 @@ public class Expenses<K extends Comparable<K>, V extends Comparable <V>> {
 		}
 		int pos = hash(key);
 		if (tabla[pos] == null){
-			tabla[pos] = new AVLTreeEx(value);
+			tabla[pos] = new AVLTreeEx<V>(value);
 		}
 		tabla[pos].insert(value);
 		this.elements++;
@@ -66,7 +70,7 @@ public class Expenses<K extends Comparable<K>, V extends Comparable <V>> {
 		return (V) tabla[pos].remove(value).getElement();
 	}
 	
-	public AVLTreeEx getTree(K key) {
+	public AVLTreeEx<V> getTree(K key) {
 		if (key == null) {
 			throw new NullPointerException("Invalid key. Key is null");
 		}

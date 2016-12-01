@@ -2,8 +2,6 @@ package Project;
 
 import java.util.Stack;
 
-import Project.AVLTree.Node;
-
 public class Data {
 	private Name<String, Names> tableOfNames;
 	private Payment<String, Invoice> tableOfPayments;
@@ -63,15 +61,18 @@ public class Data {
 		}
 		
 		int total = 0;
-		AVLTree temp = this.tableOfPayments.getTree(name);
+		AVLTree<Invoice> temp = this.tableOfPayments.getTree(name);
 		
 		Stack<Invoice> is = temp.inOrderNode();
-		Stack<Invoice> es; 
+		Stack<Expense> es; 
 		
 		while(!is.isEmpty()){
-			es = this.tableOfExpenses.getTree(is.pop().getInvoiceNum()).inOrderNode();
-			while(!es.isEmpty()){
-				total += es.pop().getAmount();
+			int pos = is.pop().getInvoiceNum();
+			if(this.tableOfExpenses.contains(pos)){
+				es = this.tableOfExpenses.getTree(pos).inOrderNode();
+				while(!es.isEmpty()){
+					total += es.pop().getCost();
+				}
 			}
 		}
 		return total;
@@ -83,7 +84,7 @@ public class Data {
 		}
 		
 		int total = 0;
-		AVLTree temp = this.tableOfPayments.getTree(name);
+		AVLTree<Invoice> temp = this.tableOfPayments.getTree(name);
 		
 		Stack<Invoice> is = temp.inOrderNode();
 		while(!is.isEmpty()){
@@ -97,6 +98,27 @@ public class Data {
 			throw new IllegalArgumentException("Name is not in the table");
 		}
 		return Math.abs(this.getTotalExpenses(name1) - this.getTotalExpenses(name2));
+	}
+	
+	public static void main(String[] args) {
+		Data database = new Data();
+		database.addName("Alejandro", "Somewhere");
+		
+		database.addInvoice("Alejandro", 1, 1000);
+		database.addInvoice("Alejandro", 2, 2000);
+		database.addInvoice("Alejandro", 3, 4000);
+		database.addInvoice("Alejandro", 4, 5000);
+		
+		database.addExpense("Alejandro", "Beer", 2, 100);
+		database.addExpense("Alejandro", "A ball", 2, 100);
+		database.addExpense("Alejandro", "Something else", 2, 100);
+		
+		System.out.println(database.getInvoice("Alejandro", 1));
+		System.out.println(database.getInvoice("Alejandro", 2));
+		System.out.println(database.getInvoice("Alejandro", 3));
+		System.out.println(database.getInvoice("Alejandro", 4));
+		System.out.println(database.getTotalPayments("Alejandro"));
+		System.out.println(database.getTotalExpenses("Alejandro"));
 	}
 	
 }

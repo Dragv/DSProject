@@ -10,7 +10,7 @@ public class Payment<K extends Comparable<K>, V extends Comparable<V>> extends H
 		this(INIT_CAP, 48);
 	}
 	
-	public AVLTree getTree(K key) {
+	public AVLTree<V> getTree(K key) {
 		if (key == null) {
 			throw new NullPointerException("Invalid key. Key is null");
 		}

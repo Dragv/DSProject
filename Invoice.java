@@ -43,7 +43,7 @@ public class Invoice implements Comparable<Invoice>{
 	}
 	
 	public String toString() {
-		return ("Name - " + this.name + ". Invoice Num - " + this.invoiceNum + ". Payment - " + this.amount);
+		return ("Name - " + this.name + "\nInvoice Num - " + this.invoiceNum + "\nPayment - " + this.amount + "\n");
 	}
 
 	public int compareTo(Invoice a) {

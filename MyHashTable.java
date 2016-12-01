@@ -67,7 +67,7 @@ public class MyHashTable<K, V> {
 			}
 		}
 		this.elements++;
-		tabla[pos] = new Node(tabla[pos], key, value);
+		tabla[pos] = new Node<K, V>(tabla[pos], key, value);
 	}
 
 	public V remove(K key) {

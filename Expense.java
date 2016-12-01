@@ -54,7 +54,7 @@ public class Expense implements Comparable<Expense> {
 	}
 	
 	public String toString() {
-		return ("Name - " + this.name + ". Invoice Num - " + this.invoiceNum + ". Item - " + this.item + ". Cost - " + this.cost);
+		return ("Name - " + this.name + "\nInvoice Num - " + this.invoiceNum + "\nItem - " + this.item + "\nCost - " + this.cost + "\n");
 	}
 
 	public int compareTo(Expense o) {

@@ -1,9 +1,6 @@
 package Project;
 
-import java.util.EmptyStackException;
 import java.util.Stack;
-
-import Project.AVLTree.Node;
 
 public class AVLTreeEx<V extends Comparable<V>> {
 
@@ -39,6 +36,7 @@ public class AVLTreeEx<V extends Comparable<V>> {
 		} else if (cmp > 0) {
 			n.right = insert(element, n.right);
 		}
+		n.counter++;
 		return balance(n);
 	}
 	
@@ -70,7 +68,7 @@ public class AVLTreeEx<V extends Comparable<V>> {
 			if(cmp == 0){
 				if (x.counter > 1){
 					x.counter--;
-					break;
+					return x;
 				}
 				break;
 			}else if(cmp > 0){
@@ -186,21 +184,21 @@ public class AVLTreeEx<V extends Comparable<V>> {
 		return null;
 	}
 
-	private Stack<V> inOrderNode(NodeEx<V> nodo, Stack nodes) {
+	private Stack<V> inOrderNode(NodeEx<V> nodo, Stack<V> nodes) {
 		if (nodo.left != null) {
 			while(nodo.left.counter > 1){
-				nodes.push(nodo.left);
+				nodes.push(nodo.left.getElement());
 				nodo.left.counter--;
 			}
-			nodes.push(nodo.left);
+			nodes.push(nodo.left.getElement());
 			inOrderNode(nodo.left, nodes);
 		}
 		if (nodo.right != null) {
 			while(nodo.right.counter > 1){
-				nodes.push(nodo.right);
+				nodes.push(nodo.right.getElement());
 				nodo.right.counter--;
 			}
-			nodes.push(nodo.right);
+			nodes.push(nodo.right.getElement());
 			inOrderNode(nodo.right, nodes);
 		}
 		return nodes;

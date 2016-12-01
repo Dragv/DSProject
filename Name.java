@@ -1,9 +1,5 @@
 package Project;
 
-import java.util.Iterator;
-
-import Project.AVLTree.Node;
-
 /*Main table extending a Hash table using an array to store names and their respective data in a AVL tree*/
 
 @SuppressWarnings("hiding")

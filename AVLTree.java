@@ -1,6 +1,5 @@
 package Project;
 
-import java.util.EmptyStackException;
 import java.util.Stack;
 
 
@@ -184,13 +183,13 @@ public class AVLTree<V extends Comparable<V>> {
 		return null;
 	}
 
-	private Stack<V> inOrderNode(Node<V> nodo, Stack nodes) {
+	private Stack<V> inOrderNode(Node<V> nodo, Stack<V> nodes) {
 		if (nodo.left != null) {
-			nodes.push(nodo.left);
+			nodes.push(nodo.left.getElement());
 			inOrderNode(nodo.left, nodes);
 		}
 		if (nodo.right != null) {
-			nodes.push(nodo.right);
+			nodes.push(nodo.right.getElement());
 			inOrderNode(nodo.right, nodes);
 		}
 		return nodes;
