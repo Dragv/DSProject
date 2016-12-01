@@ -1,70 +1,74 @@
 package Project;
 
 import java.util.EmptyStackException;
+import java.util.Stack;
 
 
-public class AVLTree<K extends Comparable<K>, V> {
 
-	private Node<K, V> root;
+public class AVLTree<V extends Comparable<V>> {
+
+	private Node<V> root;
+	private int size;
 	private static final int ALLOWED_IMBALANCE = 1;
 
 	public AVLTree() {
 		this.root = null;
 	}
 	
-	public AVLTree(K key, V value) {
-		this.root = new Node<K, V>(value, key, null, null);
+	public AVLTree(V value) {
+		this.root = new Node<V>(value, null, null);
 	}
 
-	public AVLTree(Node<K, V> toAdd) {
+	public AVLTree(Node<V> toAdd) {
 		this.root = toAdd;
 	}
 
-	public void insert(K key, V element) {
+	public void insert(V element) {
 		if (this.root == null) {
-			this.root = new Node<K, V>(element, key, null, null);
+			this.root = new Node<V>(element, null, null);
 		} else {
-			this.root = insert(element, key, this.root);
+			this.root = insert(element, this.root);
 		}
 	}
 
-	private Node<K, V> insert(V element, K key, Node<K, V> n) {
+	private Node<V> insert(V element, Node<V> n) {
 		if (n == null)
-			return new Node<K, V>(element, key, null, null);
-		int cmp = key.compareTo(n.key);
+			return new Node<V>(element, null, null);
+		int cmp = element.compareTo(n.Element);
 		if (cmp < 0) {
-			n.left = insert(element, key, n.left);
+			n.left = insert(element, n.left);
 		} else if (cmp > 0) {
-			n.right = insert(element, key, n.right);
+			n.right = insert(element, n.right);
 		}
+		this.size++;
 		return balance(n);
 	}
 	
-	public Node<K, V> get(K key){
+	public V get(V element){
 		if (this.isEmpty()){
 			throw new IllegalArgumentException("Tree is empty");
 		}
-		return get(key, this.root);
+		return get(element, this.root);
 	}
 	
-	private Node<K, V> get(K key, Node<K, V> n){
-		int cmp = key.compareTo(n.key);
+	private V get(V element, Node<V> n){
+		int cmp = element.compareTo(n.Element);
 		if (cmp < 0){
-			return get(key, n.left);
+			return get(element, n.left);
 		} else if (cmp > 0) {
-			return get(key, n.right);
+			return get(element, n.right);
 		}
-		return n;
+		return n.getElement();
 	}
 	
-	public Node<K, V> remove(K key){
+	public Node<V> remove(V element){
 		if (this.isEmpty()){
 			throw new IllegalArgumentException("Tree is empty");
 		}
-		Node<K, V> x = this.root;
-		Node<K, V> temp;
+		Node<V> x = this.root;
+		Node<V> temp;
 		while(x != null){
-			int cmp = key.compareTo(x.key);
+			int cmp = element.compareTo(x.Element);
 			if(cmp == 0)
 				break;
 			else if(cmp > 0)
@@ -78,20 +82,21 @@ public class AVLTree<K extends Comparable<K>, V> {
 			temp = x;
 			treeDelete(x);
 		}
+		this.size--;
 		this.balance(x);
 		return temp;
 	}
-	private void treeDelete(Node<K, V> n){
+	private void treeDelete(Node<V> n){
 		if(n.left == null) transplant(n,n.right);
 		else if(n.right == null) transplant(n,n.left);
 		else{
-			Node<K, V> max = maximum(n.left);
+			Node<V> max = maximum(n.left);
 			if(!findParent(max).equals(n)){
 				transplant(max,max.right);
 				max.right = n.right;
 			}
 			transplant(n,max);
-			Node<K, V> replace = null;
+			Node<V> replace = null;
 			if(max.left != null) replace = max.left;
 			max.left = n.left;
 			while(n.left != null){
@@ -101,8 +106,8 @@ public class AVLTree<K extends Comparable<K>, V> {
 		}
 	}
 	
-	private void transplant(Node<K, V> u, Node<K, V> v){
-		Node<K, V> uParent = findParent(u);
+	private void transplant(Node<V> u, Node<V> v){
+		Node<V> uParent = findParent(u);
 		
 		if(uParent == null){
 			this.root = v;
@@ -114,14 +119,14 @@ public class AVLTree<K extends Comparable<K>, V> {
 			uParent.right = v;
 		}
 	}
-	private Node<K, V> findParent(Node<K, V> n){
+	private Node<V> findParent(Node<V> n){
 		if(n.equals(this.root)){
 			return null;
 		}
-		Node<K, V> temp = this.root;
-		Node<K, V> parent = temp;
+		Node<V> temp = this.root;
+		Node<V> parent = temp;
 		while(temp != null){
-			int cmp = n.key.compareTo(temp.key);
+			int cmp = n.Element.compareTo(temp.Element);
 			if(cmp == 0)
 				break;
 			else if(cmp > 0){
@@ -136,7 +141,7 @@ public class AVLTree<K extends Comparable<K>, V> {
 		return parent;
 	}
 	
-	private Node<K, V> maximum(Node<K, V> n){
+	private Node<V> maximum(Node<V> n){
 		if(n == null)
 			return null;
 		else if(n.right == null)
@@ -158,7 +163,7 @@ public class AVLTree<K extends Comparable<K>, V> {
 		}
 	}
 
-	private String inOrder(Node<K, V> nodo) {
+	private String inOrder(Node<V> nodo) {
 		String salida = "";
 		if (nodo.left != null) {
 			salida += inOrder(nodo.left);
@@ -169,8 +174,29 @@ public class AVLTree<K extends Comparable<K>, V> {
 		}
 		return salida;
 	}
+	
+	public Stack<V> inOrderNode() {
+		if (this.root != null) {
+			Stack<V> nodes = new Stack<V>();
+			nodes.push(this.root.Element);
+			return inOrderNode(this.root, nodes);
+		} 
+		return null;
+	}
 
-	private Node<K, V> balance(Node<K, V> n) {
+	private Stack<V> inOrderNode(Node<V> nodo, Stack nodes) {
+		if (nodo.left != null) {
+			nodes.push(nodo.left);
+			inOrderNode(nodo.left, nodes);
+		}
+		if (nodo.right != null) {
+			nodes.push(nodo.right);
+			inOrderNode(nodo.right, nodes);
+		}
+		return nodes;
+	}
+	
+	private Node<V> balance(Node<V> n) {
 		if (n == null)
 			return n;
 
@@ -193,17 +219,17 @@ public class AVLTree<K extends Comparable<K>, V> {
 		return n;
 	}
 
-	private int height(Node<K, V> n) {
+	private int height(Node<V> n) {
 		return n == null ? 0 : n.height;
 	}
 
-	private Node<K, V> doubleWithLeftChild(Node<K, V> x) {
+	private Node<V> doubleWithLeftChild(Node<V> x) {
 		x.left = rotateWithRightChild(x.left);
 		return rotateWithLeftChild(x);
 	}
 
-	private Node<K, V> rotateWithLeftChild(Node<K, V> a) {
-		Node<K, V> b = a.left;
+	private Node<V> rotateWithLeftChild(Node<V> a) {
+		Node<V> b = a.left;
 		a.left = b.right;
 		b.right = a;
 		a.height = Math.max(height(a.left), height(a.right)) + 1;
@@ -211,42 +237,43 @@ public class AVLTree<K extends Comparable<K>, V> {
 		return b;
 	}
 
-	private Node<K, V> doubleWithRightChild(Node<K, V> x) {
+	private Node<V> doubleWithRightChild(Node<V> x) {
 		x.right = rotateWithLeftChild(x.right);
 		return rotateWithRightChild(x);
 	}
 
-	private Node<K, V> rotateWithRightChild(Node<K, V> a) {
-		Node<K, V> b = a.right;
+	private Node<V> rotateWithRightChild(Node<V> a) {
+		Node<V> b = a.right;
 		a.right = b.left;
 		b.left = a;
 		a.height = Math.max(height(a.left), height(a.right)) + 1;
 		b.height = Math.max(height(b.left), height(b.right)) + 1;
 		return b;
 	}
+	
+	public int size(){
+		return this.size;
+	}
+	
+	public Node<V> getRoot(){
+		return this.root;
+	}
 
-	public static class Node<K extends Comparable<K>, V> {
+	public static class Node<V extends Comparable<V>> {
 		V Element;
-		K key;
 		int height;
-		Node<K, V> left, right;
+		Node<V> left, right;
 
-		public Node(V element, K key, Node<K, V> left, Node<K, V> right) {
-			this.Element = element;
-			this.key = key;
+		public Node(V element, Node<V> left, Node<V> right) {
+			this.Element = element;;
 			this.left = left;
 			this.right = right;
 			this.height = 1;
 		}
 		
-		public Node(V element, K key) {
+		public Node(V element) {
 			this.Element = element;
-			this.key = key;
 			this.height = 1;
-		}
-
-		public K getKey() {
-			return key;
 		}
 		
 		public V getElement() {
@@ -254,7 +281,7 @@ public class AVLTree<K extends Comparable<K>, V> {
 		}
 
 		public String toString() {
-			return "[" + key + "-" + Element + "]";
+			return "[" + Element + "]";
 		}
 	}
 
