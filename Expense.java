@@ -58,6 +58,17 @@ public class Expense implements Comparable<Expense> {
 	}
 
 	public int compareTo(Expense o) {
-		return this.item.compareTo(o.item);	
+		int x = this.item.compareTo(o.item);	
+		if (x == 1 || x == -1){
+			return x;
+		} else {
+			if (this.getCost() > o.getCost()){
+				return 1;
+			} else if (this.getCost() < o.getCost()){
+				return -1;
+			} else {
+				return 0;
+			}
+		}
 	}
 }
