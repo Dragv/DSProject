@@ -2,8 +2,6 @@ package Project;
 
 import java.util.Stack;
 
-
-
 public class AVLTree<V extends Comparable<V>> {
 
 	private Node<V> root;
@@ -13,7 +11,7 @@ public class AVLTree<V extends Comparable<V>> {
 	public AVLTree() {
 		this.root = null;
 	}
-	
+
 	public AVLTree(V value) {
 		this.root = new Node<V>(value, null, null);
 	}
@@ -42,14 +40,14 @@ public class AVLTree<V extends Comparable<V>> {
 		this.size++;
 		return balance(n);
 	}
-	
+
 	public V get(V element){
 		if (this.isEmpty()){
 			throw new IllegalArgumentException("Tree is empty");
 		}
 		return get(element, this.root);
 	}
-	
+
 	private V get(V element, Node<V> n){
 		int cmp = element.compareTo(n.Element);
 		if (cmp < 0){
@@ -59,7 +57,7 @@ public class AVLTree<V extends Comparable<V>> {
 		}
 		return n.getElement();
 	}
-	
+
 	public Node<V> remove(V element){
 		if (this.isEmpty()){
 			throw new IllegalArgumentException("Tree is empty");
@@ -104,10 +102,10 @@ public class AVLTree<V extends Comparable<V>> {
 			n.right = replace;
 		}
 	}
-	
+
 	private void transplant(Node<V> u, Node<V> v){
 		Node<V> uParent = findParent(u);
-		
+
 		if(uParent == null){
 			this.root = v;
 		}
@@ -139,7 +137,7 @@ public class AVLTree<V extends Comparable<V>> {
 		}
 		return parent;
 	}
-	
+
 	private Node<V> maximum(Node<V> n){
 		if(n == null)
 			return null;
@@ -149,7 +147,7 @@ public class AVLTree<V extends Comparable<V>> {
 			n = n.right;
 		return n;
 	}
-	
+
 	public boolean isEmpty(){
 		return this.root == null;
 	}
@@ -173,13 +171,13 @@ public class AVLTree<V extends Comparable<V>> {
 		}
 		return salida;
 	}
-	
+
 	public Stack<V> inOrderNode() {
 		if (this.root != null) {
 			Stack<V> nodes = new Stack<V>();
 			nodes.push(this.root.Element);
 			return inOrderNode(this.root, nodes);
-		} 
+		}
 		return null;
 	}
 
@@ -194,7 +192,7 @@ public class AVLTree<V extends Comparable<V>> {
 		}
 		return nodes;
 	}
-	
+
 	private Node<V> balance(Node<V> n) {
 		if (n == null)
 			return n;
@@ -249,11 +247,11 @@ public class AVLTree<V extends Comparable<V>> {
 		b.height = Math.max(height(b.left), height(b.right)) + 1;
 		return b;
 	}
-	
+
 	public int size(){
 		return this.size;
 	}
-	
+
 	public Node<V> getRoot(){
 		return this.root;
 	}
@@ -269,12 +267,12 @@ public class AVLTree<V extends Comparable<V>> {
 			this.right = right;
 			this.height = 1;
 		}
-		
+
 		public Node(V element) {
 			this.Element = element;
 			this.height = 1;
 		}
-		
+
 		public V getElement() {
 			return Element;
 		}
